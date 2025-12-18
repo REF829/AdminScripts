@@ -1,124 +1,181 @@
--- INSTAN, DONT SKID BRO --
+--  [ [INSTAN V5, PLEASE DONT STEAL AND NAME AS YOUR OWN OR REMOVE ANYTHING IMPORTANT] ]  --
+-- little extra --
+local CMDSUI = Instance.new("ScreenGui")
+CMDSUI.ResetOnSpawn = false
+CMDSUI.IgnoreGuiInset = true
+CMDSUI.Parent = game.Players.LocalPlayer.PlayerGui
+CMDSUI.Enabled = false
+local cmdsbackground = Instance.new("Frame")
+cmdsbackground.Size = UDim2.new(0, 318, 0, 166)
+cmdsbackground.Position = UDim2.new(0.5, 0, 0.5, 0)
+cmdsbackground.AnchorPoint = Vector2.new(0.5, 0.5)
+cmdsbackground.BackgroundColor3 = Color3.new(255, 255, 255)
+cmdsbackground.Parent = CMDSUI
+local a = Instance.new("UICorner")
+a.Parent = cmdsbackground
+local Name = Instance.new("TextLabel")
+Name.Size = UDim2.new(0, 306, 0, 36)
+Name.Position = UDim2.new(0.019, 0, 0.036, 0)
+Name.Text = "commands"
+Name.BackgroundColor3 = Color3.new(221, 221, 221)
+Name.Parent = cmdsbackground
+local b = Instance.new("UICorner")
+b.Parent = Name
+local cmds = Instance.new("TextLabel")
+cmds.BackgroundColor3 = Color3.new(221, 221, 221)
+cmds.Size = UDim2.new(0, 306, 0, 36)
+cmds.Position = UDim2.new(0.019, 0, 0.392, 0)
+cmds.Text = "-- prefix: [] -- 1, fly - 2, noclip/clip - 3, rs/reset - 4, rj/rejoin"
+cmds.Parent = cmdsbackground
+local c = Instance.new("UICorner")
+c.Parent = cmds
+game.StarterGui:SetCore("ChatMakeSystemMessage", {
+	Text = "[Instan V5]: hey! to see commands just type [cmds] in chat";
+	Color = Color3.fromRGB(0, 255, 170);
+	Font = Enum.Font.SourceSansBold;
+	FontSize = Enum.FontSize.Size18;
+})
+-- start --
 local UIS = game:GetService("UserInputService")
 local TS = game:GetService("TeleportService")
 local Player = game:GetService("Players").LocalPlayer
 local Camera = workspace.CurrentCamera
 local Flying = false
+local Noclipping = false
 local moveKeysDown = {
-    W = false,
-    A = false,
-    S = false,
-    D = false,
+	W = false,
+	A = false,
+	S = false,
+	D = false,
 }
 local keyMap = {
-    [Enum.KeyCode.W] = "W",
-    [Enum.KeyCode.A] = "A",
-    [Enum.KeyCode.S] = "S",
-    [Enum.KeyCode.D] = "D",
+	[Enum.KeyCode.W] = "W",
+	[Enum.KeyCode.A] = "A",
+	[Enum.KeyCode.S] = "S",
+	[Enum.KeyCode.D] = "D",
 }
 
+-- main functions --
 local function canUseMovement()
-    if UIS:GetFocusedTextBox() then
-        return false
-    end
-    return true
+	if UIS:GetFocusedTextBox() then
+		return false
+	end
+	return true
 end
 UIS.InputBegan:Connect(function(input, gameProcessedEvent)
-    if gameProcessedEvent then return end
-    local name = keyMap[input.KeyCode]
-    if name and canUseMovement() then
-        moveKeysDown[name] = true
-    end
+	if gameProcessedEvent then return end
+	local name = keyMap[input.KeyCode]
+	if name and canUseMovement() then
+		moveKeysDown[name] = true
+	end
 end)
 UIS.InputEnded:Connect(function(input, gameProcessedEvent)
-    local name = keyMap[input.KeyCode]
-    if name then
-        moveKeysDown[name] = false
-    end
+	local name = keyMap[input.KeyCode]
+	if name then
+		moveKeysDown[name] = false
+	end
 end)
-local function toggleFly()
-    Flying = not Flying
+local function fly()
+	Flying = not Flying
 
-    if Flying then
-        local char = Player.Character
-        local rootPart:BasePart = char:WaitForChild("HumanoidRootPart")
-        local hum:Humanoid = char:WaitForChild("Humanoid")
-        hum.PlatformStand = true
-        local currentCF = rootPart.CFrame
+	if Flying then
+		local char = Player.Character
+		local rootPart:BasePart = char:WaitForChild("HumanoidRootPart")
+		local hum:Humanoid = char:WaitForChild("Humanoid")
+		hum.PlatformStand = true
+		local currentCF = rootPart.CFrame
 
-        while Flying and task.wait() do
-            local add = Vector3.new(0, 0, 0)
+		while Flying and task.wait() do
+			local add = Vector3.new(0, 0, 0)
 
-            if moveKeysDown.W and canUseMovement() then add += Camera.CFrame.LookVector end
-            if moveKeysDown.S and canUseMovement() then add -= Camera.CFrame.LookVector end
-            if moveKeysDown.D and canUseMovement() then add += Camera.CFrame.RightVector end
-            if moveKeysDown.A and canUseMovement() then add -= Camera.CFrame.RightVector end
+			if moveKeysDown.W and canUseMovement() then add += Camera.CFrame.LookVector end
+			if moveKeysDown.S and canUseMovement() then add -= Camera.CFrame.LookVector end
+			if moveKeysDown.D and canUseMovement() then add += Camera.CFrame.RightVector end
+			if moveKeysDown.A and canUseMovement() then add -= Camera.CFrame.RightVector end
 
-            rootPart.AssemblyLinearVelocity = Vector3.zero
-            rootPart.AssemblyAngularVelocity = Vector3.zero
+			rootPart.AssemblyLinearVelocity = Vector3.zero
+			rootPart.AssemblyAngularVelocity = Vector3.zero
 
-            currentCF += add
-            rootPart.CFrame = CFrame.lookAt(
-                currentCF.Position,
-                currentCF.Position + (Camera.CFrame.LookVector * 2)
-            )
-        end
+			currentCF += add
+			rootPart.CFrame = CFrame.lookAt(
+				currentCF.Position,
+				currentCF.Position + (Camera.CFrame.LookVector * 2)
+			)
+		end
 
-        hum.PlatformStand = false
-    end
+		hum.PlatformStand = false
+	end
+end
+local function noclip()
+	if Noclipping then
+		if Player.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
+			Player.Character.LowerTorso.CanCollide = false
+			Player.Character.UpperTorso.CanCollide = false
+			Player.Character.HumanoidRootPart.CanCollide = false
+			Player.Character.HumanoidRootPart.CanQuery = false
+		elseif Player.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
+			Player.Character.Torso.CanCollide = false
+			Player.Character.Humanoid.CanQuery = false
+		end
+	end
+	if not Noclipping then
+		if Player.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
+			Player.Character.LowerTorso.CanCollide = true
+			Player.Character.UpperTorso.CanCollide = true
+			Player.Character.HumanoidRootPart.CanCollide = true
+			Player.Character.HumanoidRootPart.CanQuery = true
+		elseif Player.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
+			Player.Character.Torso.CanCollide = true
+			Player.Character.Torso.CanQuery = true
+		end
+	end
 end
 local function reset()
-    local Character = Player.Character
-    local Humanoid = Character.Humanoid
-    Humanoid.Health = 0
+	local Character = Player.Character
+	local Humanoid = Character.Humanoid
+	Humanoid.Health = 0
 end
-local function refresh()
-    local ws=game.Workspace
-    local char=game.Players.LocalPlayer.Character
-    local newChar = Instance.new("Model")
-    newChar.Parent = workspace
-    newChar.Name="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-    if char:FindFirstChildOfClass("Humanoid") then char:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
-    char:ClearAllChildren()
-    game.Players.LocalPlayer.Character = newChar
-    if ws then
-        dele=ws:WaitForChild(char.Name)
-        if dele then
-            dele:Destroy()
-        end
-    end
-    game.Players.LocalPlayer.Character = char
-    wait(.1)
-    newChar:Destroy()
+local function rejoin()
+	local placeId = game.PlaceId
+	local jobId = game.JobId
+	TS:TeleportToPlaceInstance(placeId, jobId, Player)
 end
-local function Rejoin()
-    local placeId = game.PlaceId
-    local jobId = game.JobId
-    TS:TeleportToPlaceInstance(placeId, jobId, Player)
+local function cmds()
+	CMDSUI.Enabled = not CMDSUI.Enabled
 end
 
+-- chat commands --
 Player.Chatted:Connect(function(MSG)
-    if MSG == "[fly]" then
-        toggleFly()
-    elseif MSG == "[unfly]" then
-        Flying = false
-    end
+	if MSG == "[fly]" then
+		fly()
+	elseif MSG == "[unfly]" then
+		Flying = false
+	end
 end)
 Player.Chatted:Connect(function(MSG)
-    if MSG == "[rs]" then
-        reset()
-    end
+	if MSG == "[rs]" or MSG == "[reset]" then
+		reset()
+	end
 end)
 Player.Chatted:Connect(function(MSG)
-    if MSG == "[re]" then
-        refresh()
-    end
+	if MSG == "[rj]" or MSG == "[rejoin]" then
+		rejoin()
+	end
 end)
 Player.Chatted:Connect(function(MSG)
-    if MSG == "[rj]" then
-        Rejoin()
-    end
+	if MSG == "[noclip]" then
+		Noclipping = true
+		noclip()
+	elseif MSG == "[clip]" then
+		Noclipping = false
+		noclip()
+	end
+end)
+Player.Chatted:Connect(function(MSG)
+	if MSG == "[cmds]" then
+		cmds()
+	end
 end)
 Player.CharacterAdded:Connect(function()
-  Flying = false
+	Flying = false
 end)
