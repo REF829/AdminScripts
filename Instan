@@ -140,6 +140,11 @@ local function rejoin()
 	local jobId = game.JobId
 	TS:TeleportToPlaceInstance(placeId, jobId, Player)
 end
+local function sit()
+	if game.Players.LocalPlayer.Character.Humanoid then
+		game.Players.LocalPlayer.Character.Humanoid.Sit = true
+	end
+end
 local function cmds()
 	CMDSUI.Enabled = not CMDSUI.Enabled
 end
