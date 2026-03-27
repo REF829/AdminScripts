@@ -1,4 +1,4 @@
---  [ [INSTAN V5, PLEASE DONT STEAL AND NAME AS YOUR OWN OR REMOVE ANYTHING IMPORTANT] ]  --
+--  [ [INSTAN V6, PLEASE DONT STEAL AND NAME AS YOUR OWN OR REMOVE ANYTHING IMPORTANT] ]  --
 -- little extra --
 local CMDSUI = Instance.new("ScreenGui")
 CMDSUI.ResetOnSpawn = false
@@ -25,7 +25,7 @@ local cmds = Instance.new("TextLabel")
 cmds.BackgroundColor3 = Color3.new(221, 221, 221)
 cmds.Size = UDim2.new(0, 306, 0, 36)
 cmds.Position = UDim2.new(0.2, 0, 0.392, 0)
-cmds.Text = "-- prefix: [] -- 1, fly - 2, noclip/clip - 3, rs/reset - 4, rj/rejoin"
+cmds.Text = "prefix: [command-here] - 1, fly - 2, noclip/clip - 3, rs/reset - 4, rj/rejoin"
 cmds.Parent = cmdsbackground
 local c = Instance.new("UICorner")
 c.Parent = cmds
